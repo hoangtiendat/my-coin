@@ -12,30 +12,19 @@ import Typography from '@mui/material/Typography';
 import FormHelperText from '@mui/material/FormHelperText';
 
 
-const PasswordForm = () => {
+const EnterPassword = () => {
 	const [values, setValues] = React.useState({
 		password: '',
 		errPasssword: "",
 		showPassword: false,
-		repassword: '',
-		errRepasssword: "",
-		showRepassword: false,
 		isValid: false,
 	});
 
 	const handleChange = (prop) => (event) => {
-		if (prop === "password") {
-			if (event.target.value.length < 8) {
-				setValues({ ...values, [prop]: event.target.value, errPasssword: "Your password must be at least 8 characters."});
-			} else {
-				setValues({ ...values, [prop]: event.target.value,  errPasssword: "" });
-			}
+		if (event.target.value.length < 8) {
+			setValues({ ...values, [prop]: event.target.value, errPasssword: "Your password must be at least 8 characters."});
 		} else {
-			if (event.target.value != values.password) {
-				setValues({ ...values, [prop]: event.target.value, errRepasssword: "Passwords don't match."});
-			} else {
-				setValues({ ...values, [prop]: event.target.value,  errRepasssword: "", isValid: true });
-			}
+			setValues({ ...values, [prop]: event.target.value,  errPasssword: "" });
 		}
 		
 	};
@@ -46,12 +35,6 @@ const PasswordForm = () => {
 			showPassword: !values.showPassword,
 		});
 	};
-	const handleClickShowRepassword = () => {
-		setValues({
-			...values,
-			showRepassword: !values.showRepassword,
-		});
-	};
 
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault();
@@ -60,14 +43,17 @@ const PasswordForm = () => {
 	return (
 		<div>
 			<Typography sx={{ fontSize: 14, fontWeight: 700 }} color="text.secondary" gutterBottom>
-				STEP 1.
+				STEP 2.
 			</Typography>
 			<Typography variant="h5" component="div">
-				Create password
+				Enter Password
+			</Typography>
+			<Typography component="div" gutterBottom>
+				Enter your password to unlock your wallet.
 			</Typography>
 			<Box sx={{ display: 'flex', flexDirection: 'column', marginTop: 5, alignItems: 'center' }}>
 				<FormControl fullWidth sx={{ m: 1, width: '25ch' }} variant="outlined">
-					<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+					<InputLabel htmlFor="outlined-adornment-password">Enter Password</InputLabel>
 					<OutlinedInput
 						id="outlined-adornment-password"
 						type={values.showPassword ? 'text' : 'password'}
@@ -86,35 +72,12 @@ const PasswordForm = () => {
 								</IconButton>
 							</InputAdornment>
 						}
-						label="Password"
+						label="Enter Password"
 					/>
 					<FormHelperText id="my-helper-password" error={true}>{values.errPasssword}</FormHelperText>
-				</FormControl>
-				<FormControl fullWidth sx={{ m: 1, width: '25ch' }} variant="outlined">
-					<InputLabel htmlFor="outlined-adornment-repassword">Confirm Password</InputLabel>
-					<OutlinedInput
-						id="outlined-adornment-repassword"
-						type={values.showRepassword ? 'text' : 'password'}
-						value={values.repassword}
-						onChange={handleChange('repassword')}
-						endAdornment={
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle repassword visibility"
-									onClick={handleClickShowRepassword}
-									// onMouseDown={handleMouseDownPassword}
-									edge="end"
-								>
-									{values.showRepassword ? <VisibilityOff /> : <Visibility />}
-								</IconButton>
-							</InputAdornment>
-						}
-						label="Confirm Password"
-					/>
-					<FormHelperText id="my-helper-repassword" error={true}>{values.errRepasssword}</FormHelperText>
 				</FormControl>
 			</Box>
 		</div>
 	);
 };
-export default PasswordForm;
+export default EnterPassword;
