@@ -12,12 +12,12 @@ import Typography from '@mui/material/Typography';
 import FormHelperText from '@mui/material/FormHelperText';
 
 
-const PasswordForm = () => {
+const PasswordForm = ({password, setPassword}) => {
 	const [values, setValues] = React.useState({
-		password: '',
+		password: password,
 		errPasssword: "",
 		showPassword: false,
-		repassword: '',
+		repassword: password,
 		errRepasssword: "",
 		showRepassword: false,
 		isValid: false,
@@ -29,9 +29,10 @@ const PasswordForm = () => {
 				setValues({ ...values, [prop]: event.target.value, errPasssword: "Your password must be at least 8 characters."});
 			} else {
 				setValues({ ...values, [prop]: event.target.value,  errPasssword: "" });
+				setPassword(event.target.value);
 			}
 		} else {
-			if (event.target.value != values.password) {
+			if (event.target.value !== values.password) {
 				setValues({ ...values, [prop]: event.target.value, errRepasssword: "Passwords don't match."});
 			} else {
 				setValues({ ...values, [prop]: event.target.value,  errRepasssword: "", isValid: true });
@@ -73,7 +74,6 @@ const PasswordForm = () => {
 						type={values.showPassword ? 'text' : 'password'}
 						value={values.password}
 						onChange={handleChange('password')}
-						helperText="Incorrect entry."
 						endAdornment={
 							<InputAdornment position="end">
 								<IconButton

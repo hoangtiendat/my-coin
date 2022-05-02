@@ -11,6 +11,7 @@ import SendSvg from '../../img/send.svg';
 import ShareSvg from '../../img/share.svg';
 import BackupSvg from '../../img/backup.svg';
 
+
 const DowloadFile = () => {
 	const [values, setValues] = React.useState({
 		password: '',
