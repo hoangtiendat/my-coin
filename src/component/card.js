@@ -1,15 +1,12 @@
-import React, {Component} from "react"
+import React, {Component} from "react";
+import backgroundImage from "./../img/background-card.png";
 
 export default class Card extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   render () {
-    return (<div className="info-card">
-      <span className='card-wallet'>My Wallet Address </span><p className="wallet-address">{this.props.wallet}</p>
-      <p className="balance">Balance: {this.props.amount} MC</p>
+    return (<div className="info-card" style={{backgroundImage: "url( " + backgroundImage + ")"}}>
+      <span className='card-wallet'>My Persional Account</span><p className="wallet-address">{this.props.wallet}</p>
+      <p className="balance">Balance: {this.props.amount} ETH</p>
       <form onSubmit={this.props.onSendMoney} className="send-form">
         <div>
           <label htmlFor="send-wallet">Send to: </label>

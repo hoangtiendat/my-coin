@@ -67,7 +67,7 @@ class App extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      myCoin: new Blockchain,
+      myCoin: new Blockchain(),
       myKey: null,
       myWalletAddress: null,
     }
@@ -82,26 +82,26 @@ class App extends Component {
   }
 
   handleCreateWallet = () => {
-    // const key = ec.genKeyPair();
-    // this.setState({
-    //   myWalletAddress: key.getPublic('hex'),
-    //   myKey: key.getPrivate('hex')
-    // });
-    
-    const storeFile = keythereum.exportToFile(keyObject);
-    const stringFile = typeof storeFile === 'object' ? JSON.stringify(storeFile) : storeFile;
-    if (stringFile === null) return '';
-    const blob = new Blob([stringFile], {
-      type: "octet/stream"
+    const key = ec.genKeyPair();
+    this.setState({
+      myWalletAddress: key.getPublic('hex'),
+      myKey: key.getPrivate('hex')
     });
-    const url = window.URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    a.href = url;
-    a.download = 'keystore';
-    a.click();
-    window.URL.revokeObjectURL(url);
+    
+  //   const storeFile = keythereum.exportToFile(keyObject);
+  //   const stringFile = typeof storeFile === 'object' ? JSON.stringify(storeFile) : storeFile;
+  //   if (stringFile === null) return '';
+  //   const blob = new Blob([stringFile], {
+  //     type: "octet/stream"
+  //   });
+  //   const url = window.URL.createObjectURL(blob);
+  //   var a = document.createElement("a");
+  //   document.body.appendChild(a);
+  //   a.style = "display: none";
+  //   a.href = url;
+  //   a.download = 'keystore';
+  //   a.click();
+  //   window.URL.revokeObjectURL(url);
   }
 
   handleMining = () => {
@@ -127,20 +127,26 @@ class App extends Component {
 
   render () {
     let i = 0;
-    console.log(this.state.myCoin?.chain);
+    const isCreated = !this.state.myKey || !this.state.myWalletAddress;
     return (
       <Fragment>
       <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <div style={{width: 540, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 50}}>
-          {!this.state.myKey || !this.state.myWalletAddress ?
-          <button style={{width: 100, height: 40, background: "blue", border: "none", color: "white",  borderRadius: "2px"}} onClick={this.handleCreateWallet}>Create wallet</button>
+          {isCreated ?
+          <button style={{width: 190, height: 62, background: "#05c0a5", border: "none", color: "white",  borderRadius: "10px", fontSize: "18px", fontWeight: "500"}} onClick={this.handleCreateWallet}>Create A New Wallet</button>
           : <Card wallet={this.state.myWalletAddress} amount={this.state.myCoin.getBalanceOfAddress(this.state.myWalletAddress)} onSendMoney={this.handleSendMoney}></Card>}
           
         </div>
+        { !isCreated &&
         <div style={{padding: "5px 30px", width: "800px"}}>
           <p><b>Transactions: </b><button disabled={this.state.myCoin?.pendingTransactions.length === 0} onClick={this.handleMining}>Mine</button></p>
-          <table>
+
+
+          <table width="100%" >
             <thead>
+            <tr>
+              <th colspan="5" style={{fontSize: "20px", fontWeight: "500"}}>Latest Transactions</th>
+            </tr>
             <tr>
               <th>From</th>
               <th>To</th>
@@ -154,28 +160,28 @@ class App extends Component {
               i++;
               return (<tr key={i}>
                 <td>#{i}</td>
-                <td className="threedots">{transaction.fromAddress === this.state.myWalletAddress ? "(You)" : ""}{transaction.fromAddress}</td>
-                <td className="threedots">{transaction.toAddress}</td>
-                <td style={{color: 'green'}}>{transaction.amount}</td>
+                <td className="threedots"><a href="#">{transaction.fromAddress === this.state.myWalletAddress ? "(You)" : ""}{transaction.fromAddress}</a></td>
+                <td className="threedots"><a href="#">{transaction.toAddress}</a></td>
+                <td style={{color: 'green'}}>{transaction.amount} Eth</td>
                 <td>{new Date(transaction.timestamp).toLocaleString()}</td>
                 <span style={{color: 'red'}}>Pending</span>
               </tr>)
             })}
-          {/* {this.state.myCoin?.chain.slice(0).reverse().map((block) => {
+          {this.state.myCoin?.chain.slice(0).reverse().map((block) => {
               return block.transactions.slice(0).reverse().map(transaction  => {
                 i++;
                 return (<tr key={i}>
                   <td>#{i}</td>
-                  <td className="threedots">{transaction.fromAddress}</td>
-                  <td className="threedots">{transaction.toAddress}</td>
-                  <td style={{color: 'green'}}>{transaction.amount}</td>
+                  <td className="threedots"><a href="#">{transaction.fromAddress}</a></td>
+                  <td className="threedots"> <a href="#">{transaction.toAddress}</a></td>
+                  <td style={{color: 'green'}}>{transaction.amount} Eth</td>
                   <td>{new Date(transaction.timestamp).toLocaleString()}</td>
                   <span style={{color: 'green'}}>Mined</span>
                 </tr>)
-              })})} */}
+              })})}
           </tbody>
           </table>
-        </div>
+        </div>}
       </div>
     </Fragment>
     );

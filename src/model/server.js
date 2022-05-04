@@ -2,8 +2,10 @@ const express = require('express');
 
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+// const io = require('socket.io')(server, { cors: { origin: '*' } });
+const io = require("socket.io").listen(server);
 const { CryptoBlockchain } = require("./cryptoBlockchain")
+server.listen(80);
 
 exports.server = {
   run(port) {
